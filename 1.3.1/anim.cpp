@@ -81,10 +81,8 @@ int main(int argc, char** argv) {
         boxRGBA(ren, 180 + x, 450, 230 + x, 460, 220, 180, 40, 255);
         boxRGBA(ren, 270 + x, 450, 320 + x, 460, 220, 180, 40, 255);
 
-        // Apresenta a renderização
         SDL_RenderPresent(ren);
 
-        // Delay para ~20 FPS
         SDL_Delay(50);
 
         // Atualiza posição horizontal
