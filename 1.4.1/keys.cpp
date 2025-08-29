@@ -18,7 +18,7 @@ int main(int argc, char* args[])
 
     /* EXECUÇÃO */
     SDL_Event evt;
-    SDL_Rect r = { 40,20, 80,80};
+    SDL_Rect r = { 40,20, 40,40};
 
     int executando = 1;
     int count = 0; //contador de retangulos
@@ -48,7 +48,7 @@ int main(int argc, char* args[])
          for (int j = 0; j < 3; j++) {
              rects[count].cores[j] = rand() % 255;
          }
-     count++;
+         count++;
      }
      
 
