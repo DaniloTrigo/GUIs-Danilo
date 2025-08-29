@@ -69,24 +69,27 @@ int main(int argc, char* args[])
             }
 
             switch (evt.key.keysym.sym) {
-            case SDLK_UP:    
-                r.y -= 5; 
+            case SDLK_UP:
+                if (r.y > 0) {
+                    r.y -= 5;
+                }
                 break;
-            case SDLK_DOWN:  
-                r.y += 5; 
+            case SDLK_DOWN:
+                if (r.y < 460){
+                    r.y += 5;
+                }
                 break;
-            case SDLK_LEFT:  
-                r.x -= 5; 
+            case SDLK_LEFT:
+                if(r.x> 0){
+                    r.x -= 5;
+				}
                 break;
-            case SDLK_RIGHT: 
-                r.x += 5; 
-                break;
-            case SDLK_ESCAPE: 
-                executando = 0; 
+            case SDLK_RIGHT:
+                if (r.x < 460) {
+                    r.x += 5;
+                }
                 break;
             }
-            break;
-
         }
 
     }
