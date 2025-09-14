@@ -4,7 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
-/* === Auxiliar (sua função) === */
+
+/* === Função Auxiliar === */
 int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms) {
     Uint32 antes = SDL_GetTicks();
     Uint32 depois = 0;
@@ -20,7 +21,7 @@ int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms) {
     return isevt;
 }
 
-/* Clamp na linha de chegada e marca finalização no primeiro toque */
+/* linha de chegada e marca finalização no primeiro toque */
 static inline bool clamp_and_finish(SDL_Rect* outer, SDL_Rect* inner, int FINISH_X) {
     if (outer->x + outer->w >= FINISH_X) {
         outer->x = FINISH_X - outer->w;
@@ -30,7 +31,7 @@ static inline bool clamp_and_finish(SDL_Rect* outer, SDL_Rect* inner, int FINISH
     return false;
 }
 
-/* Faixa quadriculada ESTÁTICA em x=260..299 (sem compound literals) */
+/* Faixa quadriculada */
 static void draw_finish_line_static(SDL_Renderer* ren, int height) {
     SDL_Rect cell;
     cell.w = 10;
@@ -70,7 +71,7 @@ int main(int argc, char* args[])
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         LARG, ALT, SDL_WINDOW_SHOWN
     );
-    /* Sem VSYNC (flags = 0). Se quiser GPU sem vsync: SDL_RENDERER_ACCELERATED */
+    
     SDL_Renderer* ren = SDL_CreateRenderer(win, -1, 0);
 
     const int FINISH_X = 280; /* borda direita trava aqui */
@@ -81,7 +82,7 @@ int main(int argc, char* args[])
     SDL_Rect r3 = { 10, 210, 20,20 };
 
     int x, y;
-    SDL_Rect r11 = { 12,  42, 16,16 };  /* miolos coloridos */
+    SDL_Rect r11 = { 12,  42, 16,16 };  
     SDL_Rect r22 = { 12, 122, 16,16 };
     SDL_Rect r33 = { 12, 212, 16,16 };
 
@@ -94,11 +95,11 @@ int main(int argc, char* args[])
     /* EXECUÇÃO */
     while (continua) {
         while (telacorrida) {
-            /* Fundo (grama) */
+            /* Fundo*/
             SDL_SetRenderDrawColor(ren, 0x55, 0x6B, 0x2F, 255);
             SDL_RenderClear(ren);
 
-            /* Linha de chegada estática */
+            /* Linha de chegada */
             draw_finish_line_static(ren, ALT);
 
             /* Carros: moldura preta + miolo colorido */
@@ -119,7 +120,7 @@ int main(int argc, char* args[])
 
                 switch (evt.type) {
                 case SDL_MOUSEMOTION:
-                    /* r3 controlado pelo mouse: apenas X (clamp 0..FINISH_X - w) */
+                    /* r3 controlado pelo mouse */
                     if (!finished[2]) {
                         SDL_GetMouseState(&x, &y);
                         if (x < 0) x = 0;
