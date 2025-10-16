@@ -1,12 +1,4 @@
-﻿// drag_click_bolsonaro.cpp
-// PNG-only + SDL_UserEvent + HUD com SDL_ttf (usando tiny.ttf)
-// - Clique simples -> “irritado” (flash curto).
-// - Arrasto -> “chorando” enquanto arrasta.
-// - Idle (900 ms sem eventos) -> “dormindo”.
-// - ESC durante gesto -> cancela e restaura a posição.
-// - HUD: banner no topo indicando o evento atual (Clicou, Arrastando, Soltou, Cancelou, Idle).
-
-#include <SDL2/SDL.h>
+﻿#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstdio>
@@ -24,7 +16,7 @@ static const int BOX_SIZE = 160;
 
 // Fonte do HUD
 #define HUD_FONT_FILE "tiny.ttf"
-#define HUD_FONT_SIZE 22   // ajuste se precisar (20–28 normalmente fica bom)
+#define HUD_FONT_SIZE 22   
 
 enum : int { EVT_CLICK = 1, EVT_DRAG_START = 2, EVT_DRAG_END = 3, EVT_CANCEL = 4, EVT_IDLE = 5 };
 
@@ -45,7 +37,6 @@ static inline bool pointInRect(int x, int y, const SDL_Rect& r) {
 
 enum class UIState { IdleSleep, Armed, Dragging, ClickFlash };
 
-// publica SDL_USEREVENT com code=EVT_*
 static void push_user_event(int code) {
     SDL_Event ue; SDL_memset(&ue, 0, sizeof(ue));
     ue.type = SDL_USEREVENT;
@@ -60,25 +51,25 @@ struct HudTTF {
     std::string lastLabel;
     SDL_Texture* textTex = nullptr;
     int textW = 0, textH = 0;
-    SDL_Color bg = { 0,0,0,180 }; // banner translúcido
+    SDL_Color bg = { 0,0,0,180 }; 
 
     SDL_Color colorForCode(int code) {
         switch (code) {
-        case EVT_CLICK:      return SDL_Color{ 0,200, 70,255 }; // verde
-        case EVT_DRAG_START: return SDL_Color{ 30,144,255,255 }; // azul
-        case EVT_DRAG_END:   return SDL_Color{ 255,200,  0,255 }; // amarelo
-        case EVT_CANCEL:     return SDL_Color{ 220, 60, 60,255 }; // vermelho
-        case EVT_IDLE:       return SDL_Color{ 180,180,180,255 }; // cinza
+        case EVT_CLICK:      return SDL_Color{ 0,200, 70,255 }; 
+        case EVT_DRAG_START: return SDL_Color{ 30,144,255,255 }; 
+        case EVT_DRAG_END:   return SDL_Color{ 255,200,  0,255 }; 
+        case EVT_CANCEL:     return SDL_Color{ 220, 60, 60,255 }; 
+        case EVT_IDLE:       return SDL_Color{ 180,180,180,255 }; 
         default:             return SDL_Color{ 255,255,255,255 };
         }
     }
     const char* textForCode(int code) {
         switch (code) {
-        case EVT_CLICK:      return "Clicou! Ficou irritado??";
-        case EVT_DRAG_START: return "Arrastando... Chora nao kkkkkk";
+        case EVT_CLICK:      return "Clicou!";
+        case EVT_DRAG_START: return "Arrastando...";
         case EVT_DRAG_END:   return "Soltou!";
-        case EVT_CANCEL:     return "Cancelou! Nao tem como escapar...";
-        case EVT_IDLE:       return "Idle (Vai ter bastante tempo para dormir)";
+        case EVT_CANCEL:     return "Cancelou!";
+        case EVT_IDLE:       return "Idle";
         default:             return "Pronto";
         }
     }
@@ -96,7 +87,7 @@ struct HudTTF {
         SDL_FreeSurface(surf);
     }
 
-    // banner no topo com altura dinâmica baseada na fonte
+    
     void draw(SDL_Renderer* ren) {
         int lineH = font ? TTF_FontHeight(font) : 20;
         int padY = 10;
@@ -122,7 +113,7 @@ struct HudTTF {
 
         // texto do evento
         if (textTex) {
-            int left = 110; // espaço para a palavra STATUS:
+            int left = 110; 
             SDL_Rect dst{ left, (banner.h - textH) / 2, textW, textH };
             if (dst.x + dst.w > WIN_W - 10) dst.w = WIN_W - 10 - dst.x;
             SDL_RenderCopy(ren, textTex, nullptr, &dst);
@@ -157,9 +148,9 @@ int main(int, char**) {
     hud.setLabel(ren, hud.textForCode(EVT_IDLE), hud.colorForCode(EVT_IDLE));
 
     // Texturas PNG
-    SDL_Texture* texDormindo = IMG_LoadTexture(ren, "bolsonaro_dormindo.png");
-    SDL_Texture* texIrritado = IMG_LoadTexture(ren, "bolsonaro_irritado.png");
-    SDL_Texture* texChorando = IMG_LoadTexture(ren, "bolsonaro_chorando.png");
+    SDL_Texture* texDormindo = IMG_LoadTexture(ren, "emoji_dormindo.png");
+    SDL_Texture* texIrritado = IMG_LoadTexture(ren, "emoji_irritado.png");
+    SDL_Texture* texChorando = IMG_LoadTexture(ren, "emoji_chorando.png");
     if (!texDormindo || !texIrritado || !texChorando) {
         std::fprintf(stderr, "IMG_LoadTexture (PNG): %s\n", IMG_GetError()); return 1;
     }
