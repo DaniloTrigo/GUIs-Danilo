@@ -1,0 +1,13 @@
+No estado Idle, o primeiro clique do mouse (SDL_MOUSEBUTTONDOWN) aciona onMouseDown(mx, my), que muda o estado para Counting, define count = 1, registra a posição inicial (x0, y0) e inicia o temporizador de silêncio de 250 milissegundos (silence = 250). 
+
+Enquanto está em Counting, cada novo clique na mesma posição que é verificado pela função sameSpot(mx, my), incrementa o contador (++count) e reinicia o temporizador, permitindo a detecção de duplo, triplo ou múltiplos cliques rápidos. 
+
+Caso o mouse se mova, a função onMotion(mx, my) detecta a variação e chama reset(), retornando ao estado Idle sem gerar evento. Quando o tempo de silêncio se esgota em onTick(dt_ms), o estado Counting termina,
+e o programa retorna o número total de cliques detectados:
+if (dt_ms >= silence) { int n = count; reset(); return n;}.
+
+Com esse valor n, o loop principal cria um novo evento de usuário (SDL_USEREVENT) e o envia à fila de eventos do SDL:
+SDL_Event u{}; u.type = SDL_USEREVENT; u.user.code = n; SDL_PushEvent(&u);.
+
+Quando o evento é recebido, o personagem executa a animação de tiro (st = State::SHOT) e dispara um projétil especial que eu declarei como Big Shot (onde eu utilizo uma sprite sheet de 10 frames de explosões), 
+alcance e escala são proporcionais ao número de cliques (n).
