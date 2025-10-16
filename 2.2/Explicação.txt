@@ -1,0 +1,10 @@
+Em Idle, um MouseDown dentro do box leva a Pressed, salvando boxOriginal, downPos e offset. Se, ainda em Pressed, o MouseMove ultrapassa DRAG_THRESHOLD, 
+passamos a Dragging e o box segue o cursor com box = mouse - offset. 
+
+Se o MouseUp ocorre sem cruzar o limiar, tratamos como clique: entramos em ClickFlash, chamamos sinalizarClique(), 
+exibimos o “emoji_irritado” por CLICK_FLASH_MS e retornamos a Idle. Em Dragging, um MouseUp apenas confirma a posição atual (confirmarPosicao()) e volta a Idle. 
+
+A qualquer momento em Pressed ou Dragging, ESC aborta o gesto: vamos a Canceled, restauramos box = boxOriginal e regressamos a Idle.
+
+A detecção de inatividade não depende de um loop ocupado; ela vem de AUX_WaitEventTimeoutCount, 
+que contabiliza o tempo sem eventos. Se nada chega por IDLE_TIMEOUT_MS, assumimos “silêncio”, muda currentTex para “dormindo” e permanece em repouso até o próximo input.
